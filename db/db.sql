@@ -11,6 +11,13 @@ CREATE TABLE IF NOT EXISTS CategoriasVehiculos (
     precio_base DECIMAL(5, 2) NOT NULL
 );
 
+-- Inserting vehicle categories into CategoriasVehiculos
+INSERT INTO CategoriasVehiculos (tipo, precio_base) VALUES
+('S', 40.00),
+('M', 60.00),
+('L', 80.00),
+('XL', 100.00);
+
 -- Creating table for Washing Types
 CREATE TABLE IF NOT EXISTS TipoLavado (
     id_tipo_lavado INT AUTO_INCREMENT PRIMARY KEY,
@@ -18,6 +25,12 @@ CREATE TABLE IF NOT EXISTS TipoLavado (
     costo_adicional DECIMAL(5, 2) NOT NULL
 );
 
+-- Inserting washing types into TipoLavado
+INSERT INTO TipoLavado (descripcion, costo_adicional) VALUES
+('Lavado normal (lavado)', 0),
+('Lavado y aspirado', 10),
+('Lavado, aspirado y encerado', 20),
+('Lavado completo (lavado, aspirado, encerado, motor, sacada de asientos)', 100);
 
 -- Creating table for Reservations
 CREATE TABLE IF NOT EXISTS Reservas (
