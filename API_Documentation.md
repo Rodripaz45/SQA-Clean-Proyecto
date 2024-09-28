@@ -37,13 +37,7 @@ http://localhost:5000
 - **Descripción**: Actualiza una reserva existente.
     ```json
     {
-        "nombre_cliente": "Juan Pérez",
-        "celular_cliente": "87654321",
-        "id_categoria": 1,
-        "id_tipo_lavado": 2,
-        "fecha_hora_reserva": "2024-09-28 15:00:00",
-        "estado_reserva": "Confirmada",
-        "lavado_motor": false
+        "estado_reserva": "Confirmada"
     }
 
 ### 5. Eliminar una reserva

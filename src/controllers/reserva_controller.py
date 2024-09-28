@@ -37,15 +37,8 @@ def add_reserva():
 # Actualizar una reserva existente
 def edit_reserva(id_reserva):
     data = request.get_json()
-    nombre_cliente = data.get('nombre_cliente')
-    celular_cliente = data.get('celular_cliente')
-    id_categoria = data.get('id_categoria')
-    id_tipo_lavado = data.get('id_tipo_lavado')
-    fecha_hora_reserva = data.get('fecha_hora_reserva')  # Debe ser un string en formato adecuado
     estado_reserva = data.get('estado_reserva')
-    lavado_motor = data.get('lavado_motor', False)
-
-    update_reserva(id_reserva, nombre_cliente, celular_cliente, id_categoria, id_tipo_lavado, fecha_hora_reserva, estado_reserva, lavado_motor)
+    update_reserva(id_reserva, estado_reserva)
     return jsonify({"message": "Reserva actualizada correctamente"}), 200
 
 # Eliminar una reserva

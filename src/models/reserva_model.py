@@ -4,7 +4,7 @@ from db.db_connection import get_db_connection
 def get_all_reservas():
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)  # Usar dictionary=True para resultados en formato de diccionario
-    cursor.execute("SELECT * FROM Reservas")
+    cursor.execute("SELECT r.id_reserva, r.nombre_cliente, r.celular_cliente, r.fecha_hora_reserva, r.estado_reserva, r.precio_total, r.lavado_motor, c.tipo AS tipo_categoria, t.descripcion AS descripcion_tipo_lavado FROM Reservas r JOIN      CategoriasVehiculos c ON r.id_categoria = c.id_categoria JOIN TipoLavado t ON r.id_tipo_lavado = t.id_tipo_lavado; ")
     reservas = cursor.fetchall()
     conn.close()
     return reservas
@@ -43,27 +43,15 @@ def create_reserva(nombre_cliente, celular_cliente, id_categoria, id_tipo_lavado
     conn.close()
 
 # Función para actualizar una reserva existente
-def update_reserva(id_reserva, nombre_cliente, celular_cliente, id_categoria, id_tipo_lavado, fecha_hora_reserva, estado_reserva, lavado_motor):
+def update_reserva(id_reserva, estado_reserva):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
-    # Obtener el precio base de la categoría
-    cursor.execute("SELECT precio_base FROM CategoriasVehiculos WHERE id_categoria = %s", (id_categoria,))
-    categoria = cursor.fetchone()
-
-    # Obtener el costo adicional del tipo de lavado
-    cursor.execute("SELECT costo_adicional FROM TipoLavado WHERE id_tipo_lavado = %s", (id_tipo_lavado,))
-    tipo_lavado = cursor.fetchone()
-
-    # Calcular el precio total
-    precio_base = categoria['precio_base'] if categoria else 0
-    costo_adicional = tipo_lavado['costo_adicional'] if tipo_lavado else 0
-    precio_total = precio_base + costo_adicional + (10 if lavado_motor else 0)
-
-    # Actualizar la reserva
-    cursor.execute("UPDATE Reservas SET nombre_cliente = %s, celular_cliente = %s, id_categoria = %s, id_tipo_lavado = %s, fecha_hora_reserva = %s, estado_reserva = %s, precio_total = %s, lavado_motor = %s WHERE id_reserva = %s", 
-                   (nombre_cliente, celular_cliente, id_categoria, id_tipo_lavado, fecha_hora_reserva, estado_reserva, precio_total, lavado_motor, id_reserva))
+    # Actualizar solo el estado de la reserva
+    cursor.execute("UPDATE Reservas SET estado_reserva = %s WHERE id_reserva = %s", 
+                   (estado_reserva, id_reserva))
     conn.commit()
+    cursor.close()
     conn.close()
 
 # Función para eliminar una reserva
