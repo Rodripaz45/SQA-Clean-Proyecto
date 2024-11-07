@@ -1,9 +1,9 @@
 from flask import Flask
 from dotenv import load_dotenv
+from flask_cors import CORS
 from src.routes.categoria_routes import categoria_bp
 from src.routes.tipo_lavado_routes import tipo_lavado_bp
 from src.routes.reserva_routes import reserva_bp
-
 import os
 
 # Cargar las variables del archivo .env
@@ -11,9 +11,10 @@ load_dotenv()
 
 # Crear la aplicación Flask
 app = Flask(__name__)
+CORS(app)  # Habilitar CORS para todas las rutas
 
 app.register_blueprint(categoria_bp)
-app.register_blueprint(tipo_lavado_bp)  
+app.register_blueprint(tipo_lavado_bp)
 app.register_blueprint(reserva_bp)
 
 # Ejecutar la aplicación en el puerto especificado

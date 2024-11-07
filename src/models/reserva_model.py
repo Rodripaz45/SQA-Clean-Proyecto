@@ -42,17 +42,31 @@ def create_reserva(nombre_cliente, celular_cliente, id_categoria, id_tipo_lavado
     conn.commit()
     conn.close()
 
-# Función para actualizar una reserva existente
+# src/models/reserva_model.py
 def update_reserva(id_reserva, estado_reserva):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
-    # Actualizar solo el estado de la reserva
+    # Obtener el número de teléfono antes de actualizar el estado
+    cursor.execute("SELECT celular_cliente FROM Reservas WHERE id_reserva = %s", (id_reserva,))
+    result = cursor.fetchone()
+    if not result:
+        cursor.close()
+        conn.close()
+        return None  # Retorna None si la reserva no existe
+
+    celular_cliente = result['celular_cliente']
+
+    # Actualizar el estado de la reserva
     cursor.execute("UPDATE Reservas SET estado_reserva = %s WHERE id_reserva = %s", 
                    (estado_reserva, id_reserva))
     conn.commit()
+
     cursor.close()
     conn.close()
+
+    # Retornar el número de teléfono del cliente
+    return celular_cliente
 
 # Función para eliminar una reserva
 def delete_reserva(id_reserva):

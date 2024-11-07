@@ -34,12 +34,27 @@ def add_reserva():
     create_reserva(nombre_cliente, celular_cliente, id_categoria, id_tipo_lavado, fecha_hora_reserva, estado_reserva, lavado_motor)
     return jsonify({"message": "Reserva creada correctamente"}), 201
 
-# Actualizar una reserva existente
+# Actualizar una reserva existente y devolver el enlace de WhatsApp
 def edit_reserva(id_reserva):
     data = request.get_json()
     estado_reserva = data.get('estado_reserva')
-    update_reserva(id_reserva, estado_reserva)
-    return jsonify({"message": "Reserva actualizada correctamente"}), 200
+    
+    # Llamada a update_reserva para actualizar el estado y obtener el número de teléfono
+    celular_cliente = update_reserva(id_reserva, estado_reserva)
+    
+    # Si no se encontró la reserva, se devuelve un error
+    if not celular_cliente:
+        return jsonify({"error": "Reserva no encontrada"}), 404
+
+    # Generar el enlace de WhatsApp con el nuevo estado
+    mensaje = f"Hola, su reserva ha sido actualizada. El estado actual es: {estado_reserva}."
+    enlace_whatsapp = f"https://wa.me/{celular_cliente}?text={mensaje.replace(' ', '%20')}"
+    
+    # Devolver el enlace en la respuesta JSON
+    return jsonify({
+        "message": "Reserva actualizada correctamente",
+        "whatsapp_link": enlace_whatsapp
+    }), 200
 
 # Eliminar una reserva
 def remove_reserva(id_reserva):
